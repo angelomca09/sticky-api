@@ -6,7 +6,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-//* ROUTES *//
+//#region //* ROUTES *//
+import authRoute from "./routes/auth.route.js";
+
+app.use("/auth", authRoute);
+//#endregion
 
 //Receive all errors from Controllers
 app.use((err, req, res, next) => {
