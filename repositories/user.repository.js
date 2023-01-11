@@ -1,57 +1,71 @@
-import User from "../models/user.model.js";
+import { connect } from "../db/mongoose.db.js";
+import { User } from "../schemas/user.schema.js";
 
-async function insertUser(user) {
+async function insertUser(values) {
   try {
-    return await User.create(user);
+    await connect();
+    const user = new User(values);
+    user.albums = [];
+    user.stickers = [];
+    await user.save();
+    return user;
   } catch (error) {
     throw error;
   }
 }
 
-async function getUsers() {
+async function updateUser(values) {
   try {
-    return await User.findAll();
+    await connect();
+    let user = await User.findById(values.id);
+    user.username = values.username;
+    user.password = values.password;
+    user.email = values.email;
+    user.telephone = values.telephone;
+    user.albums = values.albums;
+    user.stickers = values.stickers;
+    await user.save();
   } catch (error) {
     throw error;
   }
 }
 
-async function getUser(user_id) {
+async function getUser(userId) {
   try {
-    return await User.findByPk(user_id);
+    await connect();
+    const user = await User.findById(userId)
+      .populate("albums")
+      .populate("stickers");
+    return user;
   } catch (error) {
     throw error;
   }
 }
 
-async function getUserByEmail(user_email) {
+async function getUserByUsername(username) {
   try {
-    return await User.findOne({ where: { user_email } });
+    await connect();
+    const user = await User.findOne({ username });
+    return user;
   } catch (error) {
     throw error;
   }
 }
 
-async function updateUser(user) {
+async function existUser(username) {
   try {
-    await User.update(user, {
-      where: {
-        user_id: user.userId,
-      },
-    });
-    return await getUser(user.userId);
+    await connect();
+    return await User.exists({ username });
   } catch (error) {
     throw error;
   }
 }
 
-async function deleteUser(user_id) {
+async function deleteUser(userId) {
   try {
-    await User.destroy({
-      where: {
-        user_id,
-      },
-    });
+    await connect();
+    const query = await User.deleteOne({ _id: userId });
+    return !!query.deletedCount;
   } catch (error) {
     throw error;
   }
@@ -59,9 +73,9 @@ async function deleteUser(user_id) {
 
 export default {
   insertUser,
-  getUsers,
   getUser,
-  getUserByEmail,
+  getUserByUsername,
+  existUser,
   updateUser,
   deleteUser,
 };

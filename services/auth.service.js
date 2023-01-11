@@ -1,33 +1,30 @@
 import repository from "../repositories/user.repository.js";
-import { convertUsertoModel as c } from "../utils/convert.js";
 
 async function getRole(username) {
+  let role = "basic"; //could be a request
   if (username === "admin") {
-    return "admin";
+    role = "admin";
   }
-  if (await repository.getUserByEmail(username)) {
-    return "basic";
-  }
-  return "any";
+  return role;
 }
 
-async function auth(username, user_password) {
-  const user = await repository.getUserByEmail(username);
+async function auth(username, password) {
+  const user = await repository.getUserByUsername(username);
   if (!user) return false;
 
-  return user.userPassword === user_password;
+  return user.password === password;
 }
 
 async function signIn(user) {
-  if (user.email.toLowerCase() === "admin") {
+  if (user.username.toLowerCase() === "admin") {
     return errorWithMessage("Nice try ;P");
   }
-  if (await repository.getUserByEmail(user.email)) {
-    return errorWithMessage("Email unavailable.");
+  if (await repository.existUser(user.username)) {
+    return errorWithMessage("Username unavailable.");
   }
   try {
-    if (await repository.insertUser(c(user))) {
-      return success(user.email);
+    if (await repository.insertUser(user)) {
+      return await success(user.username);
     }
   } catch (err) {
     logger.info(`Error auth.service.js - ${JSON.stringify(err)}`);
@@ -36,25 +33,27 @@ async function signIn(user) {
 }
 
 async function logIn(user) {
-  const { email, password } = user;
-  if (await auth(email, password)) {
-    return success(email);
+  const { username, password } = user;
+  if (await auth(username, password)) {
+    return await success(username);
   }
   return errorWithMessage("Wrong username or password!");
 }
 
 async function success(username) {
-  const { userId, userName, userEmail, userTelephone } =
-    await repository.getUserByEmail(username);
+  const user = await repository.getUserByUsername(username);
+  const { _id: id, username: name, email, telephone } = user;
+  const profile = {
+    id,
+    username: name,
+    email,
+    telephone,
+  };
+
   return {
     success: true,
     access: await getRole(username),
-    profile: {
-      id: userId,
-      name: userName,
-      email: userEmail,
-      telephone: userTelephone,
-    },
+    profile,
   };
 }
 
