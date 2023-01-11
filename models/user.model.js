@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import db from "../repositories/postgres.js";
+import db from "../db/postgres.db.js";
 
 const User = db.define(
   "users",

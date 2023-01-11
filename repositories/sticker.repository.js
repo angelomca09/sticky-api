@@ -1,4 +1,4 @@
-import { connect } from "./mongoose.db.js";
+import { connect } from "../db/mongoose.db.js";
 import { Sticker } from "../schemas/sticker.schema.js";
 
 async function insertSticker(values) {
