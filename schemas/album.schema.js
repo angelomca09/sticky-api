@@ -1,14 +1,17 @@
 import mongoose from "mongoose";
-import StickerSchema from "./sticker.schema.js";
 
-const AlbumSchema = new mongoose.Schema(
-  {
-    name: String,
-    image: String,
-    pages: Number,
-    stickers: [StickerSchema],
-  },
-  { collection: "albums" }
-);
+const AlbumSchema = new mongoose.Schema({
+  name: String,
+  pages: Number,
+  image: String,
+  stickers: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "stickers",
+    },
+  ],
+});
 
-export default AlbumSchema;
+const Album = mongoose.model("albums", AlbumSchema);
+
+export { Album, AlbumSchema };

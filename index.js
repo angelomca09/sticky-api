@@ -9,9 +9,11 @@ app.use(cors());
 //#region //* ROUTES *//
 import authRoute from "./routes/auth.route.js";
 import stickerRoute from "./routes/sticker.route.js";
+import albumRoute from "./routes/album.route.js";
 
 app.use("/auth", authRoute);
 app.use("/sticker", stickerRoute);
+app.use("/album", albumRoute);
 //#endregion
 
 //Receive all errors from Controllers
