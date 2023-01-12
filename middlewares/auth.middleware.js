@@ -1,4 +1,5 @@
 import authService from "../services/auth.service.js";
+import userService from "../services/user.service.js";
 import basicAuth from "express-basic-auth";
 
 function authorize(...allowed) {
@@ -17,6 +18,20 @@ function authorize(...allowed) {
     }
   };
 }
+function authorizeUserByBody() {
+  return async (req, res, next) => {
+    if (req.auth.user) {
+      const user = await userService.getUser(req.body.userId);
+      if (user.username === req.auth.user || req.auth.user === "admin") {
+        next();
+      } else {
+        res.status(401).send("User not allowed");
+      }
+    } else {
+      res.status(403).send("User not found");
+    }
+  };
+}
 
 async function authorizer(username, password, callback) {
   //Admin bypass
@@ -28,4 +43,4 @@ async function authorizer(username, password, callback) {
   return callback(null, await authService.auth(username, password));
 }
 
-export { authorize, authorizer };
+export { authorize, authorizer, authorizeUserByBody };

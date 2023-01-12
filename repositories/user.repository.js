@@ -71,6 +71,55 @@ async function deleteUser(userId) {
   }
 }
 
+async function addSticker(userId, stickerId) {
+  try {
+    await connect();
+    const user = await User.findById(userId);
+    user.stickers.push(stickerId);
+    await user.save();
+    return user.stickers;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function deleteSticker(userId, stickerId) {
+  try {
+    await connect();
+    const user = await User.findById(userId);
+    const index = user.stickers.findIndex((id) => id.equals(stickerId));
+    user.stickers = user.stickers.filter((_, i) => i !== index);
+    await user.save();
+    return user.stickers;
+  } catch (error) {
+    throw error;
+  }
+}
+async function addAlbum(userId, albumId) {
+  try {
+    await connect();
+    const user = await User.findById(userId);
+    user.albums.push(albumId);
+    await user.save();
+    return user.albums;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function deleteAlbum(userId, albumId) {
+  try {
+    await connect();
+    const user = await User.findById(userId);
+    const index = user.albums.findIndex((id) => id.equals(albumId));
+    user.albums = user.albums.filter((_, i) => i !== index);
+    await user.save();
+    return user.albums;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export default {
   insertUser,
   getUser,
@@ -78,4 +127,8 @@ export default {
   existUser,
   updateUser,
   deleteUser,
+  addSticker,
+  deleteSticker,
+  addAlbum,
+  deleteAlbum,
 };

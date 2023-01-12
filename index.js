@@ -26,9 +26,11 @@ app.use(
 //* Routes with Auth
 import stickerRoute from "./routes/sticker.route.js";
 import albumRoute from "./routes/album.route.js";
+import userRoute from "./routes/user.route.js";
 
 app.use("/sticker", stickerRoute);
 app.use("/album", albumRoute);
+app.use("/user", userRoute);
 //#endregion
 
 //Receive all errors from Controllers

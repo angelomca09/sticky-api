@@ -12,10 +12,14 @@ async function getSticker(stickerId) {
 async function deleteSticker(stickerId) {
   return await repository.deleteSticker(stickerId);
 }
+async function existSticker(stickerId) {
+  return await repository.existSticker(stickerId);
+}
 
 export default {
   createSticker,
   updateSticker,
   getSticker,
   deleteSticker,
+  existSticker,
 };

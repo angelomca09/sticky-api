@@ -46,9 +46,19 @@ async function deleteAlbum(albumId) {
   }
 }
 
+async function existAlbum(albumId) {
+  try {
+    await connect();
+    return await Album.exists({ _id: albumId });
+  } catch (error) {
+    throw error;
+  }
+}
+
 export default {
   insertAlbum,
   updateAlbum,
   getAlbum,
   deleteAlbum,
+  existAlbum,
 };

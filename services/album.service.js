@@ -12,10 +12,14 @@ async function getAlbum(albumId) {
 async function deleteAlbum(albumId) {
   return await repository.deleteAlbum(albumId);
 }
+async function existAlbum(albumId) {
+  return await repository.existAlbum(albumId);
+}
 
 export default {
   createAlbum,
   updateAlbum,
   getAlbum,
   deleteAlbum,
+  existAlbum,
 };

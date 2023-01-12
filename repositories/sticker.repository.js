@@ -45,9 +45,19 @@ async function deleteSticker(stickerId) {
   }
 }
 
+async function existSticker(stickerId) {
+  try {
+    await connect();
+    return await Sticker.exists({ _id: stickerId });
+  } catch (error) {
+    throw error;
+  }
+}
+
 export default {
   insertSticker,
   updateSticker,
   getSticker,
   deleteSticker,
+  existSticker,
 };
