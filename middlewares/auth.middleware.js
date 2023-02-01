@@ -32,15 +32,17 @@ function authorizeUserByBody() {
     }
   };
 }
+function isAdmin(username, password) {
+  const admUserMatches = basicAuth.safeCompare(username, "admin");
+  const admPwdMatches = basicAuth.safeCompare(password, "admin1");
+  return admUserMatches && admPwdMatches;
+}
 
 async function authorizer(username, password, callback) {
   //Admin bypass
-  const admUserMatches = basicAuth.safeCompare(username, "admin");
-  const admPwdMatches = basicAuth.safeCompare(password, "admin1");
-
-  if (admUserMatches && admPwdMatches) return callback(null, true);
+  if (isAdmin(username, password)) return callback(null, true);
 
   return callback(null, await authService.auth(username, password));
 }
 
-export { authorize, authorizer, authorizeUserByBody };
+export { authorize, isAdmin, authorizer, authorizeUserByBody };

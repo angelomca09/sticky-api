@@ -1,3 +1,4 @@
+import { isAdmin } from "../middlewares/auth.middleware.js";
 import repository from "../repositories/user.repository.js";
 
 async function getRole(username) {
@@ -9,6 +10,8 @@ async function getRole(username) {
 }
 
 async function auth(username, password) {
+  if (isAdmin(username, password)) return true;
+
   const user = await repository.getUserByUsername(username);
   if (!user) return false;
 
@@ -41,14 +44,19 @@ async function logIn(user) {
 }
 
 async function success(username) {
-  const user = await repository.getUserByUsername(username);
-  const { _id: id, username: name, email, telephone } = user;
-  const profile = {
-    id,
-    username: name,
-    email,
-    telephone,
+  let profile = {
+    username,
   };
+  if (username !== "admin") {
+    const user = await repository.getUserByUsername(username);
+    const { _id: id, email, telephone } = user;
+    profile = {
+      id,
+      username,
+      email,
+      telephone,
+    };
+  }
 
   return {
     success: true,
