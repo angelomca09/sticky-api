@@ -12,10 +12,10 @@ async function getRole(username) {
 async function auth(username, password) {
   if (isAdmin(username, password)) return true;
 
-  const user = await repository.getUserByUsername(username);
-  if (!user) return false;
+  const userPassword = await repository.getUserPasswordByUsername(username);
+  if (!userPassword) return false;
 
-  return user.password === password;
+  return userPassword === password;
 }
 
 async function signIn(user) {

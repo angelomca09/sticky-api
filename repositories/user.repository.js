@@ -44,9 +44,21 @@ async function getUser(userId) {
 
 async function getUserByUsername(username) {
   try {
+    if (username === "admin") return "";
     await connect();
     const user = await User.findOne({ username });
     return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getUserPasswordByUsername(username) {
+  try {
+    if (username === "admin") return "";
+    await connect();
+    const user = await User.findOne({ username }).select("+password");
+    return user.password;
   } catch (error) {
     throw error;
   }
@@ -124,6 +136,7 @@ export default {
   insertUser,
   getUser,
   getUserByUsername,
+  getUserPasswordByUsername,
   existUser,
   updateUser,
   deleteUser,
