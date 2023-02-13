@@ -36,6 +36,15 @@ async function getAlbum(req, res, next) {
   }
 }
 
+async function getAlbums(req, res, next) {
+  try {
+    res.send(await service.getAlbums());
+    logger.info(`GET /album - ${JSON.stringify(req.params)}`);
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function deleteAlbum(req, res, next) {
   try {
     const { albumId } = req.params;
@@ -53,5 +62,6 @@ export default {
   createAlbum,
   updateAlbum,
   getAlbum,
+  getAlbums,
   deleteAlbum,
 };

@@ -9,6 +9,9 @@ async function updateAlbum(album) {
 async function getAlbum(albumId) {
   return await repository.getAlbum(albumId);
 }
+async function getAlbums() {
+  return await repository.getAlbums();
+}
 async function deleteAlbum(albumId) {
   return await repository.deleteAlbum(albumId);
 }
@@ -20,6 +23,7 @@ export default {
   createAlbum,
   updateAlbum,
   getAlbum,
+  getAlbums,
   deleteAlbum,
   existAlbum,
 };

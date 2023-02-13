@@ -36,6 +36,16 @@ async function getAlbum(albumId) {
   }
 }
 
+async function getAlbums() {
+  try {
+    await connect();
+    const albums = await Album.find().populate("stickers");
+    return albums;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function deleteAlbum(albumId) {
   try {
     await connect();
@@ -59,6 +69,7 @@ export default {
   insertAlbum,
   updateAlbum,
   getAlbum,
+  getAlbums,
   deleteAlbum,
   existAlbum,
 };
