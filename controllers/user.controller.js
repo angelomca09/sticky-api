@@ -41,6 +41,19 @@ async function getUser(req, res, next) {
   }
 }
 
+async function getUserByUsername(req, res, next) {
+  try {
+    const { username } = req.params;
+    if (!username) {
+      throw new Error("username is Necessary!");
+    }
+    res.send(await service.getUserByUsername(username));
+    logger.info(`GET /user/<username> - ${JSON.stringify(req.params)}`);
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function deleteUser(req, res, next) {
   try {
     const { userId } = req.params;
@@ -110,6 +123,7 @@ export default {
   createUser,
   updateUser,
   getUser,
+  getUserByUsername,
   deleteUser,
   addSticker,
   deleteSticker,

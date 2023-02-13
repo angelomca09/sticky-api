@@ -46,7 +46,9 @@ async function getUserByUsername(username) {
   try {
     if (username === "admin") return "";
     await connect();
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username })
+      .populate("albums")
+      .populate("stickers");
     return user;
   } catch (error) {
     throw error;

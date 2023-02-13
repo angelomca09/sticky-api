@@ -11,6 +11,9 @@ async function updateUser(user) {
 async function getUser(userId) {
   return await repository.getUser(userId);
 }
+async function getUserByUsername(username) {
+  return await repository.getUserByUsername(username);
+}
 async function deleteUser(userId) {
   return await repository.deleteUser(userId);
 }
@@ -39,6 +42,7 @@ export default {
   createUser,
   updateUser,
   getUser,
+  getUserByUsername,
   deleteUser,
   addSticker,
   deleteSticker,

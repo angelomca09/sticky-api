@@ -14,6 +14,7 @@ route.delete("/sticker", authorizeUserByBody(), controller.deleteSticker);
 route.post("/album", authorizeUserByBody(), controller.addAlbum);
 route.delete("/album", authorizeUserByBody(), controller.deleteAlbum);
 route.get("/:userId", controller.getUser);
+route.get("/byUsername/:username", controller.getUserByUsername);
 route.delete("/:userId", authorize("admin"), controller.deleteUser);
 
 export default route;
