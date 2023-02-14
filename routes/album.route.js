@@ -5,6 +5,7 @@ import { authorize } from "../middlewares/auth.middleware.js";
 const route = express.Router();
 
 route.post("", authorize("admin"), controller.createAlbum);
+route.post("/addSticker", authorize("admin"), controller.addStickerToAlbum);
 route.put("", authorize("admin"), controller.updateAlbum);
 route.get("", controller.getAlbums);
 route.get("/:albumId", controller.getAlbum);

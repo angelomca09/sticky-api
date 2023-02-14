@@ -11,6 +11,18 @@ async function createAlbum(req, res, next) {
   }
 }
 
+async function addStickerToAlbum(req, res, next) {
+  try {
+    const { stickerId, albumId } = req.body;
+    if (!stickerId || !albumId)
+      throw new Error("StickerId and AlbumId are Necessary!");
+    res.send(await service.addStickerToAlbum(stickerId, albumId));
+    logger.info(`POST /album/addSticker - ${JSON.stringify(req.body)}`);
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function updateAlbum(req, res, next) {
   try {
     let { id, name, pages } = req.body;
@@ -60,6 +72,7 @@ async function deleteAlbum(req, res, next) {
 
 export default {
   createAlbum,
+  addStickerToAlbum,
   updateAlbum,
   getAlbum,
   getAlbums,

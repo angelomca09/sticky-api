@@ -12,6 +12,18 @@ async function insertAlbum(values) {
   }
 }
 
+async function addStickerToAlbum(stickerId, albumId) {
+  try {
+    await connect();
+    const album = await Album.findById(albumId);
+    if (!album.stickers.includes(stickerId)) album.stickers.push(stickerId);
+    await album.save();
+    return album;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function updateAlbum(values) {
   try {
     await connect();
@@ -67,6 +79,7 @@ async function existAlbum(albumId) {
 
 export default {
   insertAlbum,
+  addStickerToAlbum,
   updateAlbum,
   getAlbum,
   getAlbums,
