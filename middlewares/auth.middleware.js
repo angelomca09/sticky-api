@@ -22,7 +22,7 @@ function authorizeUserByBody() {
   return async (req, res, next) => {
     if (req.auth.user) {
       const user = await userService.getUser(req.body.userId);
-      if (user.username === req.auth.user || req.auth.user === "admin") {
+      if (user?.username === req.auth.user || req.auth.user === "admin") {
         next();
       } else {
         res.status(401).send("User not allowed");
