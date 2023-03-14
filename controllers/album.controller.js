@@ -2,8 +2,9 @@ import service from "../services/album.service.js";
 
 async function createAlbum(req, res, next) {
   try {
-    let { name, pages } = req.body;
-    if (!name || !pages) throw new Error("Name and Pages are Necessary!");
+    let { name, pages, image } = req.body;
+    if (!name || !pages || !image)
+      throw new Error("Name, Pages and Image are Necessary!");
     res.send(await service.createAlbum(req.body));
     logger.info(`POST /album - ${JSON.stringify(req.body)}`);
   } catch (err) {
@@ -25,9 +26,9 @@ async function addStickerToAlbum(req, res, next) {
 
 async function updateAlbum(req, res, next) {
   try {
-    let { id, name, pages } = req.body;
-    if (!id || !name || !pages)
-      throw new Error("Id, Name and Pages are Necessary!");
+    let { id, name, pages, image } = req.body;
+    if (!id || !name || !pages || !image)
+      throw new Error("Id, Name, Pages and Image are Necessary!");
     res.send(await service.updateAlbum(req.body));
     logger.info(`PUT /album - ${JSON.stringify(req.body)}`);
   } catch (err) {

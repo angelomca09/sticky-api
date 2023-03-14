@@ -31,6 +31,7 @@ async function updateAlbum(values) {
     album.name = values.name;
     album.pages = values.pages;
     album.stickers = values.stickers;
+    album.image = values.image;
     await album.save();
     return album;
   } catch (error) {
