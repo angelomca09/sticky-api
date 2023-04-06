@@ -39,4 +39,6 @@ app.use((err, req, res, next) => {
   res.status(400).send({ error: err.message });
 });
 
-app.listen(3000, () => console.log("API Started!"));
+app.listen(3000, () =>
+  console.log("API Started! Running at: http://localhost:3000")
+);
