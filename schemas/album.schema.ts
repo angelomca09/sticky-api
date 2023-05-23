@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { User } from "./user.schema.js";
+import { User } from "./user.schema";
 
 const AlbumSchema = new mongoose.Schema({
   name: String,
@@ -22,7 +22,7 @@ AlbumSchema.pre("deleteOne", async function (next) {
       await user.save();
     }
     next();
-  } catch (err) {
+  } catch (err: any) {
     next(err);
   }
 });

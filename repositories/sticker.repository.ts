@@ -1,7 +1,8 @@
-import { connect } from "../db/mongoose.db.js";
-import { Sticker } from "../schemas/sticker.schema.js";
+import { connect } from "../db/mongoose.db";
+import { ISticker } from "../interfaces/ISticker";
+import { Sticker } from "../schemas/sticker.schema";
 
-async function insertSticker(values) {
+async function insertSticker(values: ISticker) {
   try {
     await connect();
     const sticker = new Sticker(values);
@@ -12,10 +13,13 @@ async function insertSticker(values) {
   }
 }
 
-async function updateSticker(values) {
+async function updateSticker(values: ISticker) {
   try {
     await connect();
     let sticker = await Sticker.findById(values.id);
+
+    if (!sticker) throw new Error(`Sticker ${values.id} does not exist!`)
+
     sticker.name = values.name;
     sticker.number = values.number;
     await sticker.save();
@@ -25,7 +29,7 @@ async function updateSticker(values) {
   }
 }
 
-async function getSticker(stickerId) {
+async function getSticker(stickerId: string) {
   try {
     await connect();
     const sticker = await Sticker.findById(stickerId);
@@ -35,7 +39,7 @@ async function getSticker(stickerId) {
   }
 }
 
-async function deleteSticker(stickerId) {
+async function deleteSticker(stickerId: string) {
   try {
     await connect();
     const query = await Sticker.deleteOne({ _id: stickerId });
@@ -45,7 +49,7 @@ async function deleteSticker(stickerId) {
   }
 }
 
-async function existSticker(stickerId) {
+async function existSticker(stickerId: string) {
   try {
     await connect();
     return await Sticker.exists({ _id: stickerId });

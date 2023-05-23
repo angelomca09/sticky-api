@@ -1,6 +1,7 @@
-import service from "../services/auth.service.js";
+import express from "express";
+import service from "../services/auth.service";
 
-async function signIn(req, res, next) {
+async function signIn(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { username, email, telephone, password } = req.body;
     if (!username || !email || !telephone || !password) {
@@ -12,7 +13,7 @@ async function signIn(req, res, next) {
     next(err);
   }
 }
-async function logIn(req, res, next) {
+async function logIn(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { username, password } = req.body;
     if (!username || !password) {

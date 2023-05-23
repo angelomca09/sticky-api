@@ -1,6 +1,6 @@
 import express from "express";
-import controller from "../controllers/sticker.controller.js";
-import { authorize } from "../middlewares/auth.middleware.js";
+import controller from "../controllers/sticker.controller";
+import { authorize } from "../middlewares/auth.middleware";
 
 const route = express.Router();
 

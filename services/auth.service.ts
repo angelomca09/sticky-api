@@ -1,7 +1,8 @@
-import { isAdmin } from "../middlewares/auth.middleware.js";
-import repository from "../repositories/user.repository.js";
+import { IProfileUser, IUser } from "../interfaces/IUser";
+import { isAdmin } from "../middlewares/auth.middleware";
+import repository from "../repositories/user.repository";
 
-async function getRole(username) {
+async function getRole(username: string) {
   let role = "basic"; //could be a request
   if (username === "admin") {
     role = "admin";
@@ -9,7 +10,7 @@ async function getRole(username) {
   return role;
 }
 
-async function auth(username, password) {
+async function auth(username: string, password: string) {
   if (isAdmin(username, password)) return true;
 
   const userPassword = await repository.getUserPasswordByUsername(username);
@@ -18,7 +19,7 @@ async function auth(username, password) {
   return userPassword === password;
 }
 
-async function signIn(user) {
+async function signIn(user: IUser) {
   if (user.username.toLowerCase() === "admin") {
     return errorWithMessage("Nice try ;P");
   }
@@ -35,7 +36,7 @@ async function signIn(user) {
   }
 }
 
-async function logIn(user) {
+async function logIn(user: IUser) {
   const { username, password } = user;
   if (await auth(username, password)) {
     return await success(username);
@@ -43,15 +44,18 @@ async function logIn(user) {
   return errorWithMessage("Wrong username or password!");
 }
 
-async function success(username) {
-  let profile = {
+async function success(username: string) {
+  let profile: IProfileUser = {
     username,
   };
   if (username !== "admin") {
     const user = await repository.getUserByUsername(username);
-    const { _id: id, email, telephone } = user;
+
+    if (!user) return
+
+    const { id, email, telephone } = user;
     profile = {
-      id,
+      id: id.toString(),
       username,
       email,
       telephone,
@@ -65,7 +69,7 @@ async function success(username) {
   };
 }
 
-async function errorWithMessage(message) {
+async function errorWithMessage(message: string) {
   return {
     success: false,
     message,

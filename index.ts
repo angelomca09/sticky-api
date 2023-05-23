@@ -27,6 +27,7 @@ app.use(
 import stickerRoute from "./routes/sticker.route.js";
 import albumRoute from "./routes/album.route.js";
 import userRoute from "./routes/user.route.js";
+import { customErrorHandler } from "./logs/errorHandler.js";
 
 app.use("/sticker", stickerRoute);
 app.use("/album", albumRoute);
@@ -34,10 +35,7 @@ app.use("/user", userRoute);
 //#endregion
 
 //Receive all errors from Controllers
-app.use((err, req, res, next) => {
-  logger.error(`${req.method} ${req.baseUrl} ${req.message}`);
-  res.status(400).send({ error: err.message });
-});
+app.use(customErrorHandler);
 
 app.listen(3000, () =>
   console.log("API Started! Running at: http://localhost:3000")
