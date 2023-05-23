@@ -1,13 +1,14 @@
-import authService from "../services/auth.service.js";
-import userService from "../services/user.service.js";
+import express from "express";
+import authService from "../services/auth.service";
+import userService from "../services/user.service";
 import basicAuth from "express-basic-auth";
 
-function authorize(...allowed) {
-  const isAllowed = (role) => allowed.indexOf(role) > -1;
+function authorize(...allowed: string[]) {
+  const isAllowed = (role: string) => allowed.indexOf(role) > -1;
 
-  return async (req, res, next) => {
-    if (req.auth.user) {
-      const role = await authService.getRole(req.auth.user);
+  return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if ((req as any).auth.user) {
+      const role = await authService.getRole((req as any).auth.user);
       if (isAllowed(role)) {
         next();
       } else {
@@ -19,10 +20,10 @@ function authorize(...allowed) {
   };
 }
 function authorizeUserByBody() {
-  return async (req, res, next) => {
-    if (req.auth.user) {
+  return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if ((req as any).auth.user) {
       const user = await userService.getUser(req.body.userId);
-      if (user?.username === req.auth.user || req.auth.user === "admin") {
+      if (user?.username === (req as any).auth.user || (req as any).auth.user === "admin") {
         next();
       } else {
         res.status(401).send("User not allowed");
@@ -32,13 +33,13 @@ function authorizeUserByBody() {
     }
   };
 }
-function isAdmin(username, password) {
+function isAdmin(username: string, password: string) {
   const admUserMatches = basicAuth.safeCompare(username, "admin");
   const admPwdMatches = basicAuth.safeCompare(password, "admin1");
   return admUserMatches && admPwdMatches;
 }
 
-async function authorizer(username, password, callback) {
+async function authorizer(username: string, password: string, callback: basicAuth.AsyncAuthorizerCallback) {
   //Admin bypass
   if (isAdmin(username, password)) return callback(null, true);
 

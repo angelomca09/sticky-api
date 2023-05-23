@@ -1,9 +1,9 @@
 import express from "express";
-import controller from "../controllers/user.controller.js";
+import controller from "../controllers/user.controller";
 import {
   authorize,
   authorizeUserByBody,
-} from "../middlewares/auth.middleware.js";
+} from "../middlewares/auth.middleware";
 
 const route = express.Router();
 

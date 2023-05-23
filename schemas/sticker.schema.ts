@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { User } from "../schemas/user.schema.js";
-import { Album } from "./album.schema.js";
+import { User } from "./user.schema";
+import { Album } from "./album.schema";
 
 const StickerSchema = new mongoose.Schema({
   name: String,
@@ -22,7 +22,7 @@ StickerSchema.pre("deleteOne", async function (next) {
       await album.save();
     }
     next();
-  } catch (err) {
+  } catch (err: any) {
     next(err);
   }
 });

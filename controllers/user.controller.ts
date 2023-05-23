@@ -1,6 +1,7 @@
-import service from "../services/user.service.js";
+import express from "express";
+import service from "../services/user.service";
 
-async function createUser(req, res, next) {
+async function createUser(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { username, email, telephone, password } = req.body;
     if (!username || !email || !telephone || !password) {
@@ -13,7 +14,7 @@ async function createUser(req, res, next) {
   }
 }
 
-async function updateUser(req, res, next) {
+async function updateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { id, username, email, telephone, password } = req.body;
     if (!id || !username || !email || !telephone || !password) {
@@ -28,7 +29,7 @@ async function updateUser(req, res, next) {
   }
 }
 
-async function getUser(req, res, next) {
+async function getUser(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { userId } = req.params;
     if (!userId) {
@@ -41,7 +42,7 @@ async function getUser(req, res, next) {
   }
 }
 
-async function getUserByUsername(req, res, next) {
+async function getUserByUsername(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { username } = req.params;
     if (!username) {
@@ -54,7 +55,7 @@ async function getUserByUsername(req, res, next) {
   }
 }
 
-async function deleteUser(req, res, next) {
+async function deleteUser(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { userId } = req.params;
     if (!userId) {
@@ -67,7 +68,7 @@ async function deleteUser(req, res, next) {
   }
 }
 
-async function addSticker(req, res, next) {
+async function addSticker(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { userId, stickerId } = req.body;
     if (!userId || !stickerId) {
@@ -80,7 +81,7 @@ async function addSticker(req, res, next) {
   }
 }
 
-async function deleteSticker(req, res, next) {
+async function deleteSticker(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { userId, stickerId } = req.body;
     if (!userId || !stickerId) {
@@ -93,7 +94,7 @@ async function deleteSticker(req, res, next) {
   }
 }
 
-async function addAlbum(req, res, next) {
+async function addAlbum(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { userId, albumId } = req.body;
     if (!userId || !albumId) {
@@ -106,7 +107,7 @@ async function addAlbum(req, res, next) {
   }
 }
 
-async function deleteAlbum(req, res, next) {
+async function deleteAlbum(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { userId, albumId } = req.body;
     if (!userId || !albumId) {

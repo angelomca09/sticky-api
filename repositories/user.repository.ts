@@ -1,7 +1,9 @@
-import { connect } from "../db/mongoose.db.js";
-import { User } from "../schemas/user.schema.js";
+import { Types } from "mongoose";
+import { connect } from "../db/mongoose.db";
+import { IUser } from "../interfaces/IUser";
+import { User } from "../schemas/user.schema";
 
-async function insertUser(values) {
+async function insertUser(values: IUser) {
   try {
     await connect();
     const user = new User(values);
@@ -14,23 +16,26 @@ async function insertUser(values) {
   }
 }
 
-async function updateUser(values) {
+async function updateUser(values: IUser) {
   try {
     await connect();
     let user = await User.findById(values.id);
+
+    if (!user) throw new Error(`User ${values.id} does not exist!`)
+
     user.username = values.username;
     user.password = values.password;
     user.email = values.email;
     user.telephone = values.telephone;
-    user.albums = values.albums;
-    user.stickers = values.stickers;
+    user.albums = values.albums ?? [];
+    user.stickers = values.stickers ?? [];
     await user.save();
   } catch (error) {
     throw error;
   }
 }
 
-async function getUser(userId) {
+async function getUser(userId: string) {
   try {
     await connect();
     const user = await User.findById(userId)
@@ -42,31 +47,36 @@ async function getUser(userId) {
   }
 }
 
-async function getUserByUsername(username) {
+async function getUserByUsername(username: string) {
   try {
     if (username === "admin") return "";
     await connect();
     const user = await User.findOne({ username })
       .populate("albums")
       .populate("stickers");
-    return user;
+
+    if (!user) throw new Error(`User '${username}' does not exist!`)
+
+    const { email, telephone } = user
+    return { id: user._id, email, telephone };
   } catch (error) {
     throw error;
   }
 }
 
-async function getUserPasswordByUsername(username) {
+async function getUserPasswordByUsername(username: string) {
   try {
     if (username === "admin") return "";
     await connect();
     const user = await User.findOne({ username }).select("+password");
+    if (!user) throw new Error(`User '${username}' does not exist!`)
     return user.password;
   } catch (error) {
     throw error;
   }
 }
 
-async function existUser(username) {
+async function existUser(username: string) {
   try {
     await connect();
     return await User.exists({ username });
@@ -75,7 +85,7 @@ async function existUser(username) {
   }
 }
 
-async function deleteUser(userId) {
+async function deleteUser(userId: string) {
   try {
     await connect();
     const query = await User.deleteOne({ _id: userId });
@@ -85,11 +95,14 @@ async function deleteUser(userId) {
   }
 }
 
-async function addSticker(userId, stickerId) {
+async function addSticker(userId: string, stickerId: string) {
   try {
     await connect();
     const user = await User.findById(userId);
-    user.stickers.push(stickerId);
+
+    if (!user) throw new Error(`User ${userId} does not exist!`)
+
+    user.stickers.push(new Types.ObjectId(stickerId));
     await user.save();
     return user.stickers;
   } catch (error) {
@@ -97,10 +110,13 @@ async function addSticker(userId, stickerId) {
   }
 }
 
-async function deleteSticker(userId, stickerId) {
+async function deleteSticker(userId: string, stickerId: string) {
   try {
     await connect();
     const user = await User.findById(userId);
+
+    if (!user) throw new Error(`User ${userId} does not exist!`)
+
     const index = user.stickers.findIndex((id) => id.equals(stickerId));
     user.stickers = user.stickers.filter((_, i) => i !== index);
     await user.save();
@@ -109,11 +125,14 @@ async function deleteSticker(userId, stickerId) {
     throw error;
   }
 }
-async function addAlbum(userId, albumId) {
+async function addAlbum(userId: string, albumId: string) {
   try {
     await connect();
     const user = await User.findById(userId);
-    user.albums.push(albumId);
+
+    if (!user) throw new Error(`User ${userId} does not exist!`)
+
+    user.albums.push(new Types.ObjectId(albumId));
     await user.save();
     return user.albums;
   } catch (error) {
@@ -121,10 +140,13 @@ async function addAlbum(userId, albumId) {
   }
 }
 
-async function deleteAlbum(userId, albumId) {
+async function deleteAlbum(userId: string, albumId: string) {
   try {
     await connect();
     const user = await User.findById(userId);
+
+    if (!user) throw new Error(`User ${userId} does not exist!`)
+
     const index = user.albums.findIndex((id) => id.equals(albumId));
     user.albums = user.albums.filter((_, i) => i !== index);
     await user.save();

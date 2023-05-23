@@ -1,6 +1,7 @@
-import service from "../services/sticker.service.js";
+import express from "express";
+import service from "../services/sticker.service";
 
-async function createSticker(req, res, next) {
+async function createSticker(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     let { name, number } = req.body;
     if (!name || !number) throw new Error("Name and Number are Necessary!");
@@ -11,7 +12,7 @@ async function createSticker(req, res, next) {
   }
 }
 
-async function updateSticker(req, res, next) {
+async function updateSticker(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     let { id, name, number } = req.body;
     if (!id || !name || !number)
@@ -23,7 +24,7 @@ async function updateSticker(req, res, next) {
   }
 }
 
-async function getSticker(req, res, next) {
+async function getSticker(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { stickerId } = req.params;
     if (!stickerId) {
@@ -36,7 +37,7 @@ async function getSticker(req, res, next) {
   }
 }
 
-async function deleteSticker(req, res, next) {
+async function deleteSticker(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { stickerId } = req.params;
     if (!stickerId) {

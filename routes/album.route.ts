@@ -1,6 +1,6 @@
 import express from "express";
-import controller from "../controllers/album.controller.js";
-import { authorize } from "../middlewares/auth.middleware.js";
+import controller from "../controllers/album.controller";
+import { authorize } from "../middlewares/auth.middleware";
 
 const route = express.Router();
 

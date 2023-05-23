@@ -1,7 +1,9 @@
-import { connect } from "../db/mongoose.db.js";
-import { Album } from "../schemas/album.schema.js";
+import { Types } from "mongoose";
+import { connect } from "../db/mongoose.db";
+import { IAlbum } from "../interfaces/IAlbum";
+import { Album } from "../schemas/album.schema";
 
-async function insertAlbum(values) {
+async function insertAlbum(values: IAlbum) {
   try {
     await connect();
     const album = new Album(values);
@@ -12,11 +14,16 @@ async function insertAlbum(values) {
   }
 }
 
-async function addStickerToAlbum(stickerId, albumId) {
+async function addStickerToAlbum(stickerId: string, albumId: string) {
   try {
     await connect();
     const album = await Album.findById(albumId);
-    if (!album.stickers.includes(stickerId)) album.stickers.push(stickerId);
+    if (!album) throw new Error(`Album ${albumId} does not exist!`)
+
+    if (!album.stickers.map(s => s._id.toString()).includes(stickerId)) {
+      album.stickers.push(new Types.ObjectId(stickerId));
+    }
+
     await album.save();
     return album;
   } catch (error) {
@@ -24,13 +31,15 @@ async function addStickerToAlbum(stickerId, albumId) {
   }
 }
 
-async function updateAlbum(values) {
+async function updateAlbum(values: IAlbum) {
   try {
     await connect();
     let album = await Album.findById(values.id);
+    if (!album) throw new Error(`Album ${values.id} does not exist!`)
+
     album.name = values.name;
     album.pages = values.pages;
-    album.stickers = values.stickers;
+    album.stickers = values.stickers ?? [];
     album.image = values.image;
     await album.save();
     return album;
@@ -39,7 +48,7 @@ async function updateAlbum(values) {
   }
 }
 
-async function getAlbum(albumId) {
+async function getAlbum(albumId: string) {
   try {
     await connect();
     const album = await Album.findById(albumId).populate("stickers");
@@ -51,6 +60,7 @@ async function getAlbum(albumId) {
 
 async function getAlbums() {
   try {
+    console.log("Caiu no repo");
     await connect();
     const albums = await Album.find().populate("stickers");
     return albums;
@@ -59,7 +69,7 @@ async function getAlbums() {
   }
 }
 
-async function deleteAlbum(albumId) {
+async function deleteAlbum(albumId: string) {
   try {
     await connect();
     const query = await Album.deleteOne({ _id: albumId });
@@ -69,7 +79,7 @@ async function deleteAlbum(albumId) {
   }
 }
 
-async function existAlbum(albumId) {
+async function existAlbum(albumId: string) {
   try {
     await connect();
     return await Album.exists({ _id: albumId });

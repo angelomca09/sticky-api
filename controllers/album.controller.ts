@@ -1,6 +1,7 @@
-import service from "../services/album.service.js";
+import express from "express";
+import service from "../services/album.service";
 
-async function createAlbum(req, res, next) {
+async function createAlbum(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     let { name, pages, image } = req.body;
     if (!name || !pages || !image)
@@ -12,7 +13,7 @@ async function createAlbum(req, res, next) {
   }
 }
 
-async function addStickerToAlbum(req, res, next) {
+async function addStickerToAlbum(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { stickerId, albumId } = req.body;
     if (!stickerId || !albumId)
@@ -24,7 +25,7 @@ async function addStickerToAlbum(req, res, next) {
   }
 }
 
-async function updateAlbum(req, res, next) {
+async function updateAlbum(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     let { id, name, pages, image } = req.body;
     if (!id || !name || !pages || !image)
@@ -36,7 +37,7 @@ async function updateAlbum(req, res, next) {
   }
 }
 
-async function getAlbum(req, res, next) {
+async function getAlbum(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { albumId } = req.params;
     if (!albumId) {
@@ -49,7 +50,7 @@ async function getAlbum(req, res, next) {
   }
 }
 
-async function getAlbums(req, res, next) {
+async function getAlbums(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     res.send(await service.getAlbums());
     logger.info(`GET /album - ${JSON.stringify(req.params)}`);
@@ -58,7 +59,7 @@ async function getAlbums(req, res, next) {
   }
 }
 
-async function deleteAlbum(req, res, next) {
+async function deleteAlbum(req: express.Request, res: express.Response, next: express.NextFunction) {
   try {
     const { albumId } = req.params;
     if (!albumId) {
