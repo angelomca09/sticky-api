@@ -57,8 +57,7 @@ async function getUserByUsername(username: string) {
 
     if (!user) throw new Error(`User '${username}' does not exist!`)
 
-    const { email, telephone } = user
-    return { id: user._id, email, telephone };
+    return user
   } catch (error) {
     throw error;
   }
